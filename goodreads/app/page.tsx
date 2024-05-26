@@ -13,6 +13,7 @@ import {
   Legend
 } from 'chart.js';
 import dayjs from 'dayjs';
+import './globals.css';  // Import the CSS file
 
 
 // Register the components
@@ -32,6 +33,8 @@ interface Book {
   'Date Read': string;
   'Number of Pages': string;
   'Exclusive Shelf': string;
+    "My Rating": string;
+    Author: string;
 }
 
 export default function Home() {
@@ -116,10 +119,73 @@ export default function Home() {
     },
   };
 
+  const topBooks = readBooks.filter(item => item["My Rating"] === "5");
+
+  // Group the top reads by year
+  const topReadsByYear = topBooks.reduce((acc, book) => {
+    const year = dayjs(book['Date Read'], 'YYYY/MM/DD').year();
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(book);
+    return acc;
+  }, {} as Record<number, Book[]>);
+
   return (
     <div>
-      <h1>Goodreads Data Visualization</h1>
       <Bar data={chartData} options={options} />
+      <h1>Top Reads by Year</h1>
+      {Object.keys(topReadsByYear).map(year => (
+        <div key={year}>
+          <h2 style={{textAlign:'center'}}>{year}</h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {topReadsByYear[parseInt(year)].map(book => (
+              <div key={book.ISBN.replace(/["=]/g, '') || book.Title} style={{ margin: '10px' }}>
+                {book.ISBN ? (
+                  <ImageWithFallback
+                    src={`https://covers.openlibrary.org/b/isbn/${book.ISBN.replace(/["=]/g, '')}-M.jpg`}
+                    alt={`${book.Title} cover`}
+                    title={`${book.Title} by ${book.Author}`}
+                    placeholder={<div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book.Author}`}><p>{book.Title}</p></div>}
+                  />
+                ) : (
+                  <div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book.Author}`}>
+                    <p>{book.Title}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
+
+interface ImageWithFallbackProps {
+  src: string;
+  alt: string;
+  title: string;
+  placeholder: React.ReactNode;
+}
+
+const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, title, placeholder }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      if (img.width > 1 && img.height > 1) {
+        setIsImageLoaded(true);
+      } else {
+        setIsImageLoaded(false);
+      }
+    };
+    img.onerror = () => setIsImageLoaded(false);
+  }, [src]);
+
+  return (
+    isImageLoaded ? <img src={src} alt={alt} title={title} style={{ width: '100px', height: '150px' }} /> : placeholder
+  );
+};

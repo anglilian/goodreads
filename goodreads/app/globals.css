@@ -26,6 +26,37 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.placeholder-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;        /* Hide overflowing content */
+  text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+  font-size: 0.9vw; /* Responsive font size */
+  height: 150px;           /* Ensure consistent height */
+  width: 100px;            /* Ensure consistent width */
+}
+
+.placeholder-box p {
+  margin: 0;              /* Remove default margin */
+  line-height: 1.1;       /* Adjust line height */
+  overflow: hidden;       /* Hide overflowing content */
+  text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+  width: 95%;            /* Ensure it takes the full width of the container */
+}
+
+@layer base {
+  h1 {
+    color: rgb(var(--foreground-rgb));
+    text-align: center;
+    font-size: x-large;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
