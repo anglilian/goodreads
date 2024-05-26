@@ -25,14 +25,23 @@ ChartJS.register(
   Legend
 );
 
+// Define the interface for the book data
+interface Book {
+  Title: string;
+  ISBN: string;
+  'Date Read': string;
+  'Number of Pages': string;
+  'Exclusive Shelf': string;
+}
+
 export default function Home() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Book[]>([]);
 
   useEffect(() => {
     fetch('/goodreads_data/2024-05-26-goodreads_library_export.csv')
       .then(response => response.text())
       .then(csv => {
-        const parsedData = Papa.parse(csv, { header: true }).data;
+        const parsedData = Papa.parse<Book>(csv, { header: true }).data;
         setData(parsedData);
       });
   }, []);
@@ -48,7 +57,7 @@ export default function Home() {
     acc[year].books++; // Increment the count for the year
     acc[year].pages += parseInt(book['Number of Pages'], 10) || 0; // Add the number of pages read
     return acc; // Return the accumulator object for the next iteration
-  }, {});
+  }, {} as Record<number, { books: number; pages: number }>);
 
    // Convert the aggregated data into a format suitable for the chart
    const chartData = {
@@ -77,7 +86,7 @@ export default function Home() {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: 'top' as const, // Ensure the position is a valid literal
       },
       title: {
         display: true,
@@ -86,16 +95,16 @@ export default function Home() {
     },
     scales: {
       'y-books': {
-        type: 'linear',
-        position: 'left',
+        type: 'linear' as const,
+        position: 'left' as const,
         title: {
           display: true,
           text: 'Books Read',
         },
       },
       'y-pages': {
-        type: 'linear',
-        position: 'right',
+        type: 'linear' as const,
+        position: 'right' as const,
         title: {
           display: true,
           text: 'Pages Read',
