@@ -32,23 +32,29 @@ const BooksByYear: React.FC = () => {
           setYear(mostRecentYear);
 
           // Filter books by the default year
-          const booksForYear = parsedData.filter(book => dayjs(book['Date Read'], 'YYYY/MM/DD').year() === mostRecentYear);
-          setBooks(booksForYear);
+          fetchBooksForYear(mostRecentYear, parsedData);
         }
       });
   }, []);
 
+  const fetchBooksForYear = (selectedYear: number, data: Book[]) => {
+    const booksForYear = data.filter(book => dayjs(book['Date Read'], 'YYYY/MM/DD').year() === selectedYear);
+    setBooks(booksForYear);
+  };
+
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedYear = parseInt(event.target.value, 10);
     setYear(selectedYear);
+
+    // Clear the current books before fetching the new ones
+    setBooks([]);
 
     // Fetch books for the selected year
     fetch('/goodreads_data/2024-05-26-goodreads_library_export.csv')
       .then(response => response.text())
       .then(csv => {
         const parsedData = Papa.parse<Book>(csv, { header: true }).data;
-        const booksForYear = parsedData.filter(book => dayjs(book['Date Read'], 'YYYY/MM/DD').year() === selectedYear);
-        setBooks(booksForYear);
+        fetchBooksForYear(selectedYear, parsedData);
       });
   };
 
@@ -75,7 +81,7 @@ const BooksByYear: React.FC = () => {
               title={book.Title}
               authorLf={book["Author l-f"]}
               alt={`${book.Title} by ${book["Author"]}`}
-              placeholder={<p>{book.Title}</p>}
+              placeholder={<div className="placeholder-box">{book.Title}</div>}
               sizeClass="w-full h-full"  // Use full size for ImageWithFallback
             />
           </div>
