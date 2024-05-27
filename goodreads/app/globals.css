@@ -29,19 +29,42 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+/* CSS for grid container and items */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0; /* No gaps between items */
+}
+
+.grid-item {
+  height: 250px; /* Adjust as needed to maintain aspect ratio */
+}
+
+/* Style for the select dropdown */
+select.custom-dropdown {
+  appearance: none; /* Remove default dropdown arrow */
+  -webkit-appearance: none; /* Remove default dropdown arrow for Safari */
+  -moz-appearance: none; /* Remove default dropdown arrow for Firefox */
+  color: white; /* Text color */
+  background-color: transparent; /* Background color */
+  padding-right: 0.5em;
+}
+
+select.custom-dropdown option {
+  color: black; /* Text color for options */
+  background-color: white; /* Background color for options */
+}
+
 .placeholder-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ccc;
+  background-color: gray;
   text-align: center;
-  padding: 10px;
   box-sizing: border-box;
   overflow: hidden;        /* Hide overflowing content */
   text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
   font-size: 0.5em + 0.5vw; /* Responsive font size */
-  height: 150px;           /* Ensure consistent height */
-  width: 100px;            /* Ensure consistent width */
 }
 
 .placeholder-box p {
@@ -49,7 +72,7 @@ body {
   line-height: 1.1;       /* Adjust line height */
   overflow: hidden;       /* Hide overflowing content */
   text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
-  width: 95%;            /* Ensure it takes the full width of the container */
+  padding: 0.2;
 }
 
 @layer base {

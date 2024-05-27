@@ -1,5 +1,3 @@
-"use client";  // This marks the component as a client component
-
 import React, { useState, useEffect } from 'react';
 import { fetchBookCover } from '../utils';
 
@@ -9,9 +7,10 @@ interface ImageWithFallbackProps {
   authorLf?: string;
   alt: string;
   placeholder: React.ReactNode;
+  sizeClass: string;  // Make sizeClass required
 }
 
-const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, authorLf, alt, placeholder }) => {
+const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, authorLf, alt, placeholder, sizeClass }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
@@ -30,7 +29,15 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, auth
   }, [isbn, title, authorLf]);
 
   return (
-    isImageLoaded && imageSrc ? <img src={imageSrc} alt={alt} title={alt} style={{ width: '100px', height: '150px' }} /> : placeholder
+    <div className={`${sizeClass} flex items-center justify-center`}>
+      {isImageLoaded && imageSrc ? (
+        <img src={imageSrc} alt={alt} title={alt} className="w-auto h-full object-cover" />
+      ) : (
+        <div className={`w-full h-full placeholder-box`} title={alt}>
+          {placeholder}
+        </div>
+      )}
+    </div>
   );
 };
 
