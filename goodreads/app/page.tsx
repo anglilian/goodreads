@@ -141,15 +141,16 @@ export default function Home() {
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {topReadsByYear[parseInt(year)].map(book => (
               <div key={book.ISBN.replace(/["=]/g, '') || book.Title} style={{ margin: '10px' }}>
-                {book.ISBN ? (
+                {book.ISBN || (book.Title && book["Author l-f"]) ? (
                   <ImageWithFallback
-                    src={`https://covers.openlibrary.org/b/isbn/${book.ISBN.replace(/["=]/g, '')}-M.jpg`}
-                    alt={`${book.Title} cover`}
-                    title={`${book.Title} by ${book.Author}`}
-                    placeholder={<div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book.Author}`}><p>{book.Title}</p></div>}
+                    isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
+                    title={book.Title}
+                    authorLf={book["Author l-f"]}
+                    alt={`${book.Title} by ${book["Author"]}`}
+                    placeholder={<div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book["Author"]}`}><p>{book.Title}</p></div>}
                   />
                 ) : (
-                  <div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book.Author}`}>
+                  <div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book["Author"]}`}>
                     <p>{book.Title}</p>
                   </div>
                 )}
@@ -162,30 +163,62 @@ export default function Home() {
   );
 }
 
+function getLastName(authorLf) {
+  if (!authorLf) return '';
+  const parts = authorLf.split(',');
+  return parts[0].trim();
+}
+
+function removeTextInsideParentheses(title) {
+  console.log(title.replace(/\s*\([^)]*\)/g, '').trim())
+  return title.replace(/\s*\([^)]*\)/g, '').trim();
+}
+
+async function fetchBookCover(isbn, title, authorLf) {
+  let query = '';
+  if (isbn) {
+    query = `isbn:${isbn}`;
+  } else if (title && authorLf) {
+    const lastName = getLastName(authorLf);
+    const cleanedTitle = removeTextInsideParentheses(title);
+    query = `intitle:${encodeURIComponent(cleanedTitle)}+inauthor:${encodeURIComponent(lastName)}`;
+  } else {
+    return null;
+  }
+
+  const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
+  const data = await response.json();
+  const book = data.items ? data.items[0] : null;
+  return book && book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : null;
+}
+
 interface ImageWithFallbackProps {
-  src: string;
+  isbn?: string;
+  title?: string;
+  authorLf?: string;
   alt: string;
-  title: string;
   placeholder: React.ReactNode;
 }
 
-const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, title, placeholder }) => {
+const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, authorLf, alt, placeholder }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      if (img.width > 1 && img.height > 1) {
+    const loadImage = async () => {
+      const coverImage = await fetchBookCover(isbn, title, authorLf);
+      if (coverImage) {
+        setImageSrc(coverImage);
         setIsImageLoaded(true);
       } else {
         setIsImageLoaded(false);
       }
     };
-    img.onerror = () => setIsImageLoaded(false);
-  }, [src]);
+
+    loadImage();
+  }, [isbn, title, authorLf]);
 
   return (
-    isImageLoaded ? <img src={src} alt={alt} title={title} style={{ width: '100px', height: '150px' }} /> : placeholder
+    isImageLoaded && imageSrc ? <img src={imageSrc} alt={alt} title={alt} style={{ width: '100px', height: '150px' }} /> : placeholder
   );
 };
