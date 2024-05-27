@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import Papa from 'papaparse';
 import TopReads from '../../components/TopReads';
 import { Book } from '../../data';
+import '../globals.css';  // Ensure this is imported to apply the styles
 
 const TopReadsPerYear: React.FC = () => {
   const [data, setData] = useState<Book[]>([]);
