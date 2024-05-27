@@ -33,8 +33,9 @@ interface Book {
   'Date Read': string;
   'Number of Pages': string;
   'Exclusive Shelf': string;
-    "My Rating": string;
-    Author: string;
+  "My Rating": string;
+  Author: string;
+  'Author l-f': string;
 }
 
 export default function Home() {
@@ -174,6 +175,8 @@ function removeTextInsideParentheses(title) {
   return title.replace(/\s*\([^)]*\)/g, '').trim();
 }
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 async function fetchBookCover(isbn, title, authorLf) {
   let query = '';
   if (isbn) {
@@ -186,11 +189,34 @@ async function fetchBookCover(isbn, title, authorLf) {
     return null;
   }
 
-  const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
-  const data = await response.json();
-  const book = data.items ? data.items[0] : null;
-  return book && book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : null;
+  let response;
+  let data;
+  let attempts = 0;
+  const maxAttempts = 3;
+  const baseDelayMs = 2000;
+
+  while (attempts < maxAttempts) {
+    try {
+      response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&fields=items(volumeInfo/imageLinks/thumbnail)`);
+      if (response.status === 429) {
+        attempts++;
+        const retryAfter = response.headers.get('Retry-After');
+        const waitTime = retryAfter ? parseInt(retryAfter, 10) * 1000 : baseDelayMs * attempts;
+        await delay(waitTime);
+      } else {
+        data = await response.json();
+        break;
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return null;
+    }
+  }
+
+  const book = data?.items ? data.items[0] : null;
+  return book?.volumeInfo?.imageLinks?.thumbnail || null;
 }
+
 
 interface ImageWithFallbackProps {
   isbn?: string;
