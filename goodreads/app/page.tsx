@@ -132,31 +132,36 @@ export default function Home() {
     return acc;
   }, {} as Record<number, Book[]>);
 
+  const sortedYears = Object.keys(topReadsByYear).sort((a, b) => parseInt(b) - parseInt(a));
+
   return (
     <div>
       <Bar data={chartData} options={options} />
       <h1>Top Reads by Year</h1>
-      {Object.keys(topReadsByYear).map(year => (
+      {sortedYears.map(year => (
         <div key={year}>
           <h2 style={{textAlign:'center'}}>{year}</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {topReadsByYear[parseInt(year)].map(book => (
-              <div key={book.ISBN.replace(/["=]/g, '') || book.Title} style={{ margin: '10px' }}>
-                {book.ISBN || (book.Title && book["Author l-f"]) ? (
-                  <ImageWithFallback
-                    isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
-                    title={book.Title}
-                    authorLf={book["Author l-f"]}
-                    alt={`${book.Title} by ${book["Author"]}`}
-                    placeholder={<div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book["Author"]}`}><p>{book.Title}</p></div>}
-                  />
-                ) : (
-                  <div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book["Author"]}`}>
-                    <p>{book.Title}</p>
-                  </div>
-                )}
-              </div>
-            ))}
+            {topReadsByYear[parseInt(year)]
+              .sort((a, b) => dayjs(b['Date Read']).diff(dayjs(a['Date Read']))) // Sort books by date read within each year
+              .slice(0, 10) // Take only the top 10 books for each year
+              .map(book => (
+                <div key={book.ISBN.replace(/["=]/g, '') || book.Title} style={{ margin: '10px' }}>
+                  {book.ISBN || (book.Title && book["Author l-f"]) ? (
+                    <ImageWithFallback
+                      isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
+                      title={book.Title}
+                      authorLf={book["Author l-f"]}
+                      alt={`${book.Title} by ${book["Author"]}`}
+                      placeholder={<div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book["Author"]}`}><p>{book.Title}</p></div>}
+                    />
+                  ) : (
+                    <div className="placeholder-box" style={{ width: '100px', height: '150px' }} title={`${book.Title} by ${book["Author"]}`}>
+                      <p>{book.Title}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       ))}

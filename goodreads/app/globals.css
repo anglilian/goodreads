@@ -36,7 +36,7 @@ body {
   box-sizing: border-box;
   overflow: hidden;        /* Hide overflowing content */
   text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
-  font-size: 0.9vw; /* Responsive font size */
+  font-size: 0.5em + 0.5vw; /* Responsive font size */
   height: 150px;           /* Ensure consistent height */
   width: 100px;            /* Ensure consistent width */
 }
