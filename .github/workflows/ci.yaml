@@ -22,6 +22,8 @@ jobs:
         run: npm run lint --if-present || true
       - name: Build
         run: npm run build
+      - name: Export
+        run: npm run export
       - name: List output files
         run: |
           echo "Listing files in the current directory:"
@@ -30,7 +32,7 @@ jobs:
           ls -la ./out
       - name: Deploy
         if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_PAGES_TOKEN }}
           publish_dir: ./out
