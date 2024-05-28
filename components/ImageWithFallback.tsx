@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchBookCover } from '../utils';
+import Image from 'next/image';
 
 interface ImageWithFallbackProps {
   isbn?: string;
@@ -31,7 +32,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, auth
   return (
     <div className={`${sizeClass} flex items-center justify-center`}>
       {isImageLoaded && imageSrc ? (
-        <img src={imageSrc} alt={alt} title={alt} className="w-auto h-full object-cover" />
+        <Image src={imageSrc} alt={alt} title={alt} className="w-auto h-full object-cover" />
       ) : (
         <div className={`w-full h-full placeholder-box`} title={alt}>
           {placeholder}
