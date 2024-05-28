@@ -22,8 +22,6 @@ jobs:
         run: npm run lint --if-present || true
       - name: Build
         run: npm run build
-      - name: Export
-        run: npm run export
       - name: List output files
         run: |
           echo "Listing files in the current directory:"
