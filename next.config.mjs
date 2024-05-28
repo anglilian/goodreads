@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  images: {
-    domains: ['books.google.com'],
-  },
-};
-
-export default nextConfig;
+    output: 'export',
+    images: {
+      domains: ['books.google.com'],
+    },
+  };
+  
+  export default nextConfig;
+  

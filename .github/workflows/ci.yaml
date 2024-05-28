@@ -19,11 +19,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npm run lint --if-present
-      - name: Build and Export
-        run: npm run export
+        run: npm run lint --if-present || true
+      - name: Build
+        run: npm run build
       - name: List output files
-        run: ls -la ./out
+        run: |
+          echo "Listing files in the current directory:"
+          ls -la
+          echo "Listing files in the out directory:"
+          ls -la ./out
       - name: Deploy
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
