@@ -32,7 +32,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, auth
   return (
     <div className={`${sizeClass} flex items-center justify-center`}>
       {isImageLoaded && imageSrc ? (
-        <Image src={imageSrc} alt={alt} title={alt} className="w-auto h-full object-cover" />
+        <Image src={imageSrc} alt={alt} title={alt} className="w-auto h-full object-cover" width="200" height="300" />
       ) : (
         <div className={`w-full h-full placeholder-box`} title={alt}>
           {placeholder}
