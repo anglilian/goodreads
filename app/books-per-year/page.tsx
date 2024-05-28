@@ -9,9 +9,10 @@ import '../globals.css';  // Ensure this is imported to apply the styles
 
 const BooksPerYear: React.FC = () => {
   const [data, setData] = useState<Book[]>([]);
+  const dataPath = process.env.NEXT_PUBLIC_DATA_PATH;
 
   useEffect(() => {
-    fetch('/goodreads_data/2024-05-26-goodreads_library_export.csv')
+    fetch(`${dataPath}/2024-05-26-goodreads_library_export.csv`)
       .then(response => response.text())
       .then(csv => {
         const parsedData = Papa.parse<Book>(csv, { header: true }).data;

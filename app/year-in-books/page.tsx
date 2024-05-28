@@ -11,9 +11,10 @@ const BooksByYear: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [year, setYear] = useState<number>(dayjs().year());
   const [availableYears, setAvailableYears] = useState<number[]>([]);
+  const dataPath = process.env.NEXT_PUBLIC_DATA_PATH;
 
   useEffect(() => {
-    fetch('/goodreads_data/2024-05-26-goodreads_library_export.csv')
+    fetch(`${dataPath}/2024-05-26-goodreads_library_export.csv`)
       .then(response => response.text())
       .then(csv => {
         const parsedData = Papa.parse<Book>(csv, { header: true }).data;
