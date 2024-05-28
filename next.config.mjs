@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    output: 'export',
-    basePath: '/goodreads',
-    images: {
-      domains: ['books.google.com'],
-    },
-    assetPrefix: '/goodreads/', // Ensure static assets are served correctly
-  };
-  
-  export default nextConfig;
-  
+  output: 'export',
+  basePath: process.env.NODE_ENV === 'production' ? '/goodreads' : '', // Adjust for local dev
+  images: {
+    unoptimized: true, // Disable image optimization
+    domains: ['books.google.com'],
+  },
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/goodreads/' : '', // Adjust for local dev
+};
+
+export default nextConfig;
