@@ -39,13 +39,13 @@ const TopReadsPerYear: React.FC = () => {
       <h1 className="text-4xl font-bold mb-8">Top Reads by Year</h1>
       {sortedYears.map(year => (
         <div key={year} className="mb-8">
-          <h2 className="text-xl font-medium mb-4 text-gray-600">{year}</h2>
+          <h2 className="text-xl font-medium text-gray-600">{year}</h2>
           <div className="flex flex-wrap justify-center">
             {topReadsByYear[parseInt(year)]
               .sort((a, b) => dayjs(b['Date Read']).diff(dayjs(a['Date Read'])))
               .slice(0, 10)
               .map(book => (
-                <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} className="grid-item">
+                <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} >
                   <ImageWithFallback
                     isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
                     title={book.Title}

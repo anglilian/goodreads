@@ -61,7 +61,7 @@ const BooksByYear: React.FC = () => {
 
   return (
     <div className="p-8">
-      <div className="flex justify-center items-center mb-8">
+      <div className="flex flex-wrap justify-center items-center mb-8">
         <h1 className="text-4xl font-bold text-center">Your</h1>
         <select 
           value={year} 

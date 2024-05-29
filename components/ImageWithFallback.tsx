@@ -10,10 +10,9 @@ interface ImageWithFallbackProps {
   placeholder: React.ReactNode;
 }
 
-const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, authorLf, alt, placeholder}) => {
+const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, authorLf, alt, placeholder }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const sizeClass = "h-40 w-24 sm:h-48 sm:w-32 md:h-56 md:w-40 lg:h-64 lg:w-48";  // Define responsive size classes
 
   useEffect(() => {
     const loadImage = async () => {
@@ -30,11 +29,18 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, auth
   }, [isbn, title, authorLf]);
 
   return (
-    <div className={`${sizeClass} flex items-center justify-center`}>
+    <div className="relative h-64" style={{ width: 'auto', aspectRatio: '2 / 3' }}> {/* Fixed height of 256px */}
       {isImageLoaded && imageSrc ? (
-        <Image src={imageSrc} alt={alt} title={alt} className="w-full h-full object-cover" width="200" height="300" />
+        <Image
+          src={imageSrc}
+          alt={alt}
+          title={alt}
+          layout="fill"
+          objectFit="contain"
+          className="object-contain"
+        />
       ) : (
-        <div className={`w-auto h-full placeholder-box`} title={alt}>
+        <div className="placeholder-box h-64 aspect-[2/3]" title={alt}>
           {placeholder}
         </div>
       )}
