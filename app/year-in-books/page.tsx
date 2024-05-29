@@ -83,7 +83,6 @@ const BooksByYear: React.FC = () => {
               authorLf={book["Author l-f"]}
               alt={`${book.Title} by ${book["Author"]}`}
               placeholder={<div className="placeholder-box">{book.Title}</div>}
-              sizeClass="w-full h-full"  // Use full size for ImageWithFallback
             />
           </div>
         ))}
