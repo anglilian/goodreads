@@ -29,17 +29,6 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-/* CSS for grid container and items */
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0; /* No gaps between items */
-}
-
-.grid-item {
-  height: 250px; /* Adjust as needed to maintain aspect ratio */
-}
-
 /* Style for the select dropdown */
 select.custom-dropdown {
   appearance: none; /* Remove default dropdown arrow */
@@ -73,21 +62,6 @@ select.custom-dropdown option {
   overflow: hidden;       /* Hide overflowing content */
   text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
   padding: 0.2;
-}
-
-.aspect-ratio-box {
-  position: relative;
-  width: 100%;
-  height: 0;
-}
-
-.aspect-ratio-box img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 @layer base {

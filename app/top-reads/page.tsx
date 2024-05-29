@@ -45,7 +45,7 @@ const TopReadsPerYear: React.FC = () => {
               .sort((a, b) => dayjs(b['Date Read']).diff(dayjs(a['Date Read'])))
               .slice(0, 10)
               .map(book => (
-                <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} >
+                <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} className="m-0 p-0">
                   <ImageWithFallback
                     isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
                     title={book.Title}

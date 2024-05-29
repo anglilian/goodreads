@@ -74,9 +74,9 @@ const BooksByYear: React.FC = () => {
         </select>
         <h1 className="text-4xl font-bold text-center">in Books</h1>
       </div>
-      <div className="grid-container">
+      <div className="flex flex-wrap justify-center">
         {books.map(book => (
-          <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} className="grid-item">
+          <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} className="m-0 p-0">
             <ImageWithFallback
               isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
               title={book.Title}
