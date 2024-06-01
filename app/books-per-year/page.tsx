@@ -1,24 +1,12 @@
 "use client";  // This marks the component as a client component
 
-import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import Papa from 'papaparse';
 import BookChart from '../../components/BookChart';
-import { Book } from '../../data';
+import useBooksData from '../../hooks/useBooksData';
 import '../globals.css';  // Ensure this is imported to apply the styles
 
 const BooksPerYear: React.FC = () => {
-  const [data, setData] = useState<Book[]>([]);
-  const dataPath = process.env.NEXT_PUBLIC_DATA_PATH;
-
-  useEffect(() => {
-    fetch(`${dataPath}/2024-05-26-goodreads_library_export.csv`)
-      .then(response => response.text())
-      .then(csv => {
-        const parsedData = Papa.parse<Book>(csv, { header: true }).data;
-        setData(parsedData);
-      });
-  }, []);
+  const data = useBooksData();
 
   const readBooks = data.filter(item => item["Exclusive Shelf"] === "read" && item["Date Read"]);
 
@@ -59,11 +47,7 @@ const BooksPerYear: React.FC = () => {
     plugins: {
       legend: {
         position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Books and Pages Read Per Year',
-      },
+      }
     },
     scales: {
       'y-books': {
@@ -89,7 +73,8 @@ const BooksPerYear: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='p-8'>
+      <h1 className='mb-8'>Books and Pages Read per Year</h1>
       <BookChart chartData={chartData} options={options} />
     </div>
   );

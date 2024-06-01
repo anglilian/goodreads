@@ -1,24 +1,13 @@
 "use client";  // This marks the component as a client component
 
-import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import Papa from 'papaparse';
 import ImageWithFallback from '../../components/ImageWithFallback';
-import { Book } from '../../data';
+import useBooksData from '../../hooks/useBooksData';
+import { Book } from '../../types/types';
 import '../globals.css';  // Ensure this is imported to apply the styles
 
 const TopReadsPerYear: React.FC = () => {
-  const [data, setData] = useState<Book[]>([]);
-  const dataPath = process.env.NEXT_PUBLIC_DATA_PATH;
-
-  useEffect(() => {
-    fetch(`${dataPath}/2024-05-26-goodreads_library_export.csv`)
-      .then(response => response.text())
-      .then(csv => {
-        const parsedData = Papa.parse<Book>(csv, { header: true }).data;
-        setData(parsedData);
-      });
-  }, [dataPath]);
+  const data = useBooksData();
 
   const readBooks = data.filter(item => item["Exclusive Shelf"] === "read" && item["Date Read"]);
   const topBooks = readBooks.filter(item => item["My Rating"] === "5");
@@ -35,12 +24,12 @@ const TopReadsPerYear: React.FC = () => {
   const sortedYears = Object.keys(topReadsByYear).sort((a, b) => parseInt(b) - parseInt(a));
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen text-center pt-8">
       <h1 className="text-4xl font-bold mb-8">Top Reads by Year</h1>
       {sortedYears.map(year => (
         <div key={year} className="mb-8">
           <h2 className="text-xl font-medium text-gray-600">{year}</h2>
-          <div className="flex flex-wrap justify-center">
+          <div className="flex flex-wrap justify-center gap-1">
             {topReadsByYear[parseInt(year)]
               .sort((a, b) => dayjs(b['Date Read']).diff(dayjs(a['Date Read'])))
               .slice(0, 10)

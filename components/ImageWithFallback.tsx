@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchBookCover } from '../utils';
 import Image from 'next/image';
-
-interface ImageWithFallbackProps {
-  isbn?: string;
-  title?: string;
-  authorLf?: string;
-  alt: string;
-  placeholder: React.ReactNode;
-}
+import { ImageWithFallbackProps } from '../types/types';
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, authorLf, alt, placeholder }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -40,7 +33,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ isbn, title, auth
           className="object-contain"
         />
       ) : (
-        <div className="placeholder-box h-64 aspect-[2/3]" title={alt}>
+        <div className="placeholder-box" title={alt}>
           {placeholder}
         </div>
       )}

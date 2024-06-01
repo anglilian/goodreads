@@ -18,57 +18,46 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  padding-top: 2rem; /* Adjust the value as needed */
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/* Style for the select dropdown */
-select.custom-dropdown {
-  appearance: none; /* Remove default dropdown arrow */
-  -webkit-appearance: none; /* Remove default dropdown arrow for Safari */
-  -moz-appearance: none; /* Remove default dropdown arrow for Firefox */
-  color: white; /* Text color */
-  background-color: transparent; /* Background color */
-  padding-right: 0.5em;
-}
-
-select.custom-dropdown option {
-  color: black; /* Text color for options */
-  background-color: white; /* Background color for options */
-}
-
-.placeholder-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: gray;
-  text-align: center;
-  box-sizing: border-box;
-  overflow: hidden;        /* Hide overflowing content */
-  text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
-  font-size: 0.5em + 0.5vw; /* Responsive font size */
-}
-
-.placeholder-box p {
-  margin: 0;              /* Remove default margin */
-  line-height: 1.1;       /* Adjust line height */
-  overflow: hidden;       /* Hide overflowing content */
-  text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
-  padding: 0.2;
-}
-
 @layer base {
   h1 {
+    @apply text-center text-4xl font-bold;
     color: rgb(var(--foreground-rgb));
-    text-align: center;
-    font-size: x-large;
+  }
+  
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--background-start-rgb), 1),
+        rgba(var(--background-end-rgb), 1)
+      )
+  }
+
+  /* Style for the select dropdown */
+  select.custom-dropdown {
+    @apply appearance-none bg-transparent pr-2;
+    color: rgb(var(--foreground-rgb)); /* Text color */
+  }
+  
+  select.custom-dropdown option {
+    color: rgb(var(--background-end-rgb));
+    background-color: rgb(var(--foreground-rgb));
+  }
+}
+
+@layer components {
+  .placeholder-box {
+    @apply flex items-center justify-center bg-gray-500 text-center box-border overflow-hidden text-ellipsis h-64 aspect-[2/3];
+    font-size: calc(0.5em + 0.5vw);
+  }
+
+  .placeholder-box p {
+    @apply m-0 leading-tight overflow-hidden text-ellipsis p-1;
+    line-height: 1.1;
+  }
+
+  .nav-link {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300;
   }
 }
 
