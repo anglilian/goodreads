@@ -11,7 +11,10 @@ const useBooksData = (): Book[] => {
       .then(response => response.text())
       .then(csv => {
         const parsedData = Papa.parse<Book>(csv, { header: true }).data;
-        setData(parsedData);
+        const filteredData = parsedData.filter(book => 
+          book.ISBN || book.Title || book.Author
+        );
+        setData(filteredData);
       });
   }, [dataPath]);
 
