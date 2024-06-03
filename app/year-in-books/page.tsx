@@ -1,13 +1,39 @@
 "use client";  // This marks the component as a client component
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import dayjs from 'dayjs';
-import ImageWithFallback from '../../components/ImageWithFallback';
+import ImageWithFallback from '@/components/ImageWithFallback';
 import { fetchBookCover } from '@/utils';
-import useBooksData from '../../hooks/useBooksData';
-import { Book } from '../../types/types';
-import '../globals.css';  // Ensure this is imported to apply the styles
+import useBooksData from '@/hooks/useBooksData';
+import { Book } from '@/types/types';
+import '@/app/globals.css';  // Ensure this is imported to apply the styles
 import Loader from '@/components/Loader';
+
+function calculateOptimalImageSize(containerWidth: number, containerHeight: number, aspectRatio: number, numberOfImages: number): { width: number, height: number, columns: number, rows: number } {
+  let low = 1;
+  let high = containerHeight;
+  let bestHeight = low;
+
+  while (low <= high) {
+    let height = Math.floor((low + high) / 2);
+    let width = height * aspectRatio;
+    let columns = Math.floor(containerWidth / width);
+    let rows = Math.floor(containerHeight / height);
+
+    if (columns * rows >= numberOfImages) {
+        bestHeight = height;
+        low = height + 1;
+    } else {
+        high = height - 1;
+    }
+  }
+
+  let bestWidth = bestHeight * aspectRatio;
+  let bestColumns = Math.floor(containerWidth / bestWidth);
+  let bestRows = Math.ceil(numberOfImages / bestColumns);
+
+  return { width: bestWidth, height: bestHeight, columns: bestColumns, rows: bestRows };
+}
 
 const BooksByYear: React.FC = () => {
   const data = useBooksData();
@@ -15,7 +41,9 @@ const BooksByYear: React.FC = () => {
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
   const [bookCovers, setBookCovers] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+  const [optimalSize, setOptimalSize] = useState<{ width: number, height: number, columns: number, rows: number }>({ width: 100, height: 150, columns: 1, rows: 1 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Extract unique years from the data
@@ -36,6 +64,26 @@ const BooksByYear: React.FC = () => {
     }
   }, [data]);
 
+  const handleResize = useCallback(() => {
+    const numBooks = books.length;
+    const containerWidth = containerRef.current ? containerRef.current.clientWidth : window.innerWidth;
+    const containerHeight = containerRef.current ? containerRef.current.clientHeight : window.innerHeight;
+    const aspectRatio = 2 / 3; // Assuming the book covers have a 2:3 aspect ratio
+
+    if (numBooks > 0) {
+      console.log(containerWidth, containerHeight);
+      setOptimalSize(calculateOptimalImageSize(containerWidth, containerHeight, aspectRatio, numBooks));
+    }
+  }, [books]);
+
+  useEffect(() => {
+    // Recalculate the image size whenever the books or window size changes
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call it initially to set the size
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [books, handleResize]);
+
   const fetchBooksForYear = async (selectedYear: number, data: Book[]) => {
     const booksForYear = data.filter(book => dayjs(book['Date Read'], 'YYYY/MM/DD').year() === selectedYear);
     setBooks(booksForYear);
@@ -45,7 +93,7 @@ const BooksByYear: React.FC = () => {
       booksForYear.map(async book => {
         console.log(`Fetching cover for ISBN: ${book.ISBN}, Title: ${book.Title}, Author: ${book['Author l-f']}`);
         const coverUrl = await fetchBookCover(book.ISBN, book.Title, book['Author l-f']);
-        const id = book["Book Id"]
+        const id = book["Book Id"];
         return { id, coverUrl };
       })
     );
@@ -57,8 +105,10 @@ const BooksByYear: React.FC = () => {
       }
       return acc;
     }, {});
+
     setBookCovers(coversMap);
     setLoading(false);
+    handleResize(); // Ensure the size is recalculated after loading
   };
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,7 +121,7 @@ const BooksByYear: React.FC = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-8 max-w-screen-lg mx-auto h-screen overflow-hidden">
       <div className="flex flex-wrap justify-center items-center mb-8">
         <h1>Your</h1>
         <select 
@@ -86,21 +136,25 @@ const BooksByYear: React.FC = () => {
         <h1>in Books</h1>
       </div>
       {loading ? (
-        <div className="flex justify-center items-center">
-            <Loader />
-          </div>
-      ) : (
-        <div className="flex flex-wrap justify-center">
-          {books.map(book => (
-            <div key={book["Book Id"]} className="gap-1">
-              <ImageWithFallback
-                imageSrc={bookCovers[book["Book Id"]]}
-                alt={`${book.Title} by ${book["Author"]}`}
-                placeholder={<div className="placeholder-box">{book.Title}</div>}
-              />
-            </div>
-          ))}
+        <div>
+          <Loader />
         </div>
+      ) : (
+        <div ref={containerRef} style={{ 
+          display: 'grid', 
+          gridTemplateColumns: `repeat(${optimalSize.columns}, ${optimalSize.width}px)`, 
+          gridTemplateRows: `repeat(${optimalSize.rows}, ${optimalSize.height}px)`,
+        }}>
+        {books.map(book => (
+          <div key={book["Book Id"]} style={{ width: optimalSize.width, height: optimalSize.height }} className="flex justify-center items-center">
+            <ImageWithFallback
+              imageSrc={bookCovers[book["Book Id"]]}
+              alt={`${book.Title} by ${book["Author"]}`}
+              placeholder={<div className="placeholder-box">{book.Title}</div>}
+            />
+          </div>
+        ))}
+      </div>
       )}
     </div>
   );

@@ -46,7 +46,7 @@
 
 @layer components {
   .placeholder-box {
-    @apply flex items-center justify-center bg-gray-500 text-center box-border overflow-hidden text-ellipsis h-64 aspect-[2/3];
+    @apply flex items-center justify-center bg-gray-500 text-center box-border overflow-hidden text-ellipsis aspect-[2/3];
     font-size: calc(0.5em + 0.5vw);
   }
 
