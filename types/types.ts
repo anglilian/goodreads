@@ -1,7 +1,5 @@
 export interface ImageWithFallbackProps {
-  isbn?: string;
-  title?: string;
-  authorLf?: string;
+  imageSrc?:string;
   alt: string;
   placeholder: React.ReactNode;
 }
@@ -15,4 +13,5 @@ export interface Book {
   "My Rating": string;
   "Exclusive Shelf": string;
   "Number of Pages": string;
+  "Book Id": string;
 }

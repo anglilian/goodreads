@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import ImageWithFallback from '../../components/ImageWithFallback';
+import { fetchBookCover } from '@/utils';
 import useBooksData from '../../hooks/useBooksData';
 import { Book } from '../../types/types';
 import '../globals.css';  // Ensure this is imported to apply the styles
@@ -12,6 +13,8 @@ const BooksByYear: React.FC = () => {
   const [year, setYear] = useState<number>(dayjs().year());
   const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [books, setBooks] = useState<Book[]>([]);
+  const [bookCovers, setBookCovers] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // Extract unique years from the data
@@ -32,9 +35,29 @@ const BooksByYear: React.FC = () => {
     }
   }, [data]);
 
-  const fetchBooksForYear = (selectedYear: number, data: Book[]) => {
+  const fetchBooksForYear = async (selectedYear: number, data: Book[]) => {
     const booksForYear = data.filter(book => dayjs(book['Date Read'], 'YYYY/MM/DD').year() === selectedYear);
     setBooks(booksForYear);
+
+    // Fetch book covers
+    const covers = await Promise.all(
+      booksForYear.map(async book => {
+        console.log(`Fetching cover for ISBN: ${book.ISBN}, Title: ${book.Title}, Author: ${book['Author l-f']}`);
+        const coverUrl = await fetchBookCover(book.ISBN, book.Title, book['Author l-f']);
+        const id = book["Book Id"]
+        return { id, coverUrl };
+      })
+    );
+
+    // Update the book covers state
+    const coversMap = covers.reduce<Record<string, string>>((acc, { id, coverUrl }) => {
+      if (id) {
+        acc[id] = coverUrl;
+      }
+      return acc;
+    }, {});
+    setBookCovers(coversMap);
+    setLoading(false);
   };
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,6 +65,7 @@ const BooksByYear: React.FC = () => {
     setYear(selectedYear);
 
     // Filter books for the selected year
+    setLoading(true);
     fetchBooksForYear(selectedYear, data);
   };
 
@@ -60,19 +84,25 @@ const BooksByYear: React.FC = () => {
         </select>
         <h1>in Books</h1>
       </div>
-      <div className="flex flex-wrap justify-center">
-        {books.map(book => (
-          <div key={book.ISBN ? book.ISBN.replace(/["=]/g, '') : book.Title} className="gap-1">
-            <ImageWithFallback
-              isbn={book.ISBN ? book.ISBN.replace(/["=]/g, '') : undefined}
-              title={book.Title}
-              authorLf={book["Author l-f"]}
-              alt={`${book.Title} by ${book["Author"]}`}
-              placeholder={<div className="placeholder-box">{book.Title}</div>}
-            />
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <div className="loader">
+            <p>Loading...</p>
+            </div> {/* Add a loader element here */}
+        </div>
+      ) : (
+        <div className="flex flex-wrap justify-center">
+          {books.map(book => (
+            <div key={book["Book Id"]} className="gap-1">
+              <ImageWithFallback
+                imageSrc={bookCovers[book["Book Id"]]}
+                alt={`${book.Title} by ${book["Author"]}`}
+                placeholder={<div className="placeholder-box">{book.Title}</div>}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

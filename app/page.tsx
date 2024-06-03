@@ -9,7 +9,6 @@ const Home: React.FC = () => {
       <nav>
       <ul className="space-y-4" >
           <li><Link href="/books-per-year" className="nav-link">Books Per Year</Link></li>
-          <li><Link href="/top-reads" className="nav-link">Top Reads</Link></li>
           <li><Link href="/year-in-books" className="nav-link">Year in Books</Link></li>
         </ul>
       </nav>
