@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -23,14 +22,14 @@
     @apply text-center text-4xl font-bold;
     color: rgb(var(--foreground-rgb));
   }
-  
+
   body {
     color: rgb(var(--foreground-rgb));
     background: linear-gradient(
-        to bottom,
-        rgba(var(--background-start-rgb), 1),
-        rgba(var(--background-end-rgb), 1)
-      )
+      to bottom,
+      rgba(var(--background-start-rgb), 1),
+      rgba(var(--background-end-rgb), 1)
+    );
   }
 
   /* Style for the select dropdown */
@@ -38,7 +37,7 @@
     @apply appearance-none bg-transparent pr-2;
     color: rgb(var(--foreground-rgb)); /* Text color */
   }
-  
+
   select.custom-dropdown option {
     color: rgb(var(--background-end-rgb));
     background-color: rgb(var(--foreground-rgb));

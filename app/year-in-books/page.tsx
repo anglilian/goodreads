@@ -7,6 +7,7 @@ import { fetchBookCover } from '@/utils';
 import useBooksData from '../../hooks/useBooksData';
 import { Book } from '../../types/types';
 import '../globals.css';  // Ensure this is imported to apply the styles
+import Loader from '@/components/Loader';
 
 const BooksByYear: React.FC = () => {
   const data = useBooksData();
@@ -86,10 +87,8 @@ const BooksByYear: React.FC = () => {
       </div>
       {loading ? (
         <div className="flex justify-center items-center">
-          <div className="loader">
-            <p>Loading...</p>
-            </div> {/* Add a loader element here */}
-        </div>
+            <Loader />
+          </div>
       ) : (
         <div className="flex flex-wrap justify-center">
           {books.map(book => (
