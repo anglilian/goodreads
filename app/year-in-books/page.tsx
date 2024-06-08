@@ -8,6 +8,7 @@ import useBooksData from '@/hooks/useBooksData';
 import { Book } from '@/types/types';
 import '@/app/globals.css';  // Ensure this is imported to apply the styles
 import Loader from '@/components/Loader';
+import { debounce } from 'lodash';
 
 function calculateOptimalImageSize(containerWidth: number, containerHeight: number, aspectRatio: number, numberOfImages: number): { width: number, height: number, columns: number, rows: number } {
   let low = 1;
@@ -64,7 +65,7 @@ const BooksByYear: React.FC = () => {
     }
   }, [data]);
 
-  const handleResize = useCallback(() => {
+  const handleResize = useCallback(debounce(() => {
     const numBooks = books.length;
     const containerWidth = containerRef.current ? containerRef.current.clientWidth : window.innerWidth;
     const containerHeight = containerRef.current ? containerRef.current.clientHeight : window.innerHeight;
@@ -74,7 +75,7 @@ const BooksByYear: React.FC = () => {
       console.log(containerWidth, containerHeight);
       setOptimalSize(calculateOptimalImageSize(containerWidth, containerHeight, aspectRatio, numBooks));
     }
-  }, [books]);
+  }, 300), [books]);
 
   useEffect(() => {
     // Recalculate the image size whenever the books or window size changes
