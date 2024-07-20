@@ -4,43 +4,35 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --background-color: #f4f1ea;
+  --primary-color: #372212;
+  --secondary-color: #b7ad98;
 }
 
 @layer base {
   h1 {
-    @apply text-center text-4xl font-bold;
-    color: rgb(var(--foreground-rgb));
+    @apply text-4xl font-bold font-roboto;
+    color: var(--primary-color);
+  }
+
+  h2 {
+    @apply font-merriweather text-3xl;
   }
 
   body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-      to bottom,
-      rgba(var(--background-start-rgb), 1),
-      rgba(var(--background-end-rgb), 1)
-    );
+    color: var(--primary-color);
+    background: var(--background-color);
   }
 
   /* Style for the select dropdown */
   select.custom-dropdown {
     @apply appearance-none bg-transparent pr-2;
-    color: rgb(var(--foreground-rgb)); /* Text color */
+    color: var(--background-color); /* Text color */
   }
 
   select.custom-dropdown option {
-    color: rgb(var(--background-end-rgb));
-    background-color: rgb(var(--foreground-rgb));
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
   }
 }
 
@@ -56,6 +48,8 @@
   }
 
   .nav-link {
-    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300;
+    @apply px-4 py-2  font-semibold rounded;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
   }
 }
