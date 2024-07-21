@@ -3,7 +3,7 @@ import React from "react";
 import { Book } from "@/types/types";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import TabletAndroidIcon from "@mui/icons-material/TabletAndroid";
-import EventSeatIcon from "@mui/icons-material/EventSeat"; // Importing chair icon
+import SofaIcon from "@mui/icons-material/Chair"; // Importing chair icon
 import CottageIcon from "@mui/icons-material/Cottage"; // Importing cottage icon
 
 interface BooksStackProps {
@@ -14,53 +14,47 @@ const BooksStack: React.FC<BooksStackProps> = ({ books }) => {
   // Assumptions
   const AVERAGE_PERSON_HEIGHT_CM = 170; // average height of a person in cm
   const KINDLE_HEIGHT_CM = 16; // height of a Kindle in cm
-  const CHAIR_HEIGHT_CM = 85; // average height of a chair in cm
+  const SOFA_HEIGHT_CM = 85; // average height of a chair in cm
   const MIN_BOOK_HEIGHT_CM = 1.5; // minimum height of one book in cm
   const MAX_BOOK_HEIGHT_CM = 2.5; // maximum height of one book in cm
   const COTTAGE_HEIGHT_CM = 550; // average height of a cottage in cm
 
-  // Scaled heights for visualization
-  const AVERAGE_PERSON_HEIGHT_PX = 250; // scaled height of a person in pixels
-  const KINDLE_HEIGHT_PX = 100; // scaled height of a Kindle in pixels
-  const CHAIR_HEIGHT_PX = 125; // scaled height of a chair in pixels
-  const COTTAGE_HEIGHT_PX = 250; // scaled height of a cottage in pixels
-
   const numBooks = books.length;
 
   // Determine the icon mode based on the number of books
-  let iconHeightPx, iconHeightCm, IconComponent, iconMargin, iconLabel;
+  let iconHeightCm, IconComponent, iconMargin, iconLabel;
   if (numBooks < 11) {
-    iconHeightPx = KINDLE_HEIGHT_PX;
     iconHeightCm = KINDLE_HEIGHT_CM;
     IconComponent = TabletAndroidIcon;
     iconMargin = 0;
     iconLabel = "Kindle";
   } else if (numBooks <= 35) {
-    iconHeightPx = CHAIR_HEIGHT_PX;
-    iconHeightCm = CHAIR_HEIGHT_CM;
-    IconComponent = EventSeatIcon;
-    iconMargin = -15;
-    iconLabel = "chair";
+    iconHeightCm = SOFA_HEIGHT_CM;
+    IconComponent = SofaIcon;
+    iconMargin = -40;
+    iconLabel = "sofa";
   } else if (numBooks <= 80) {
-    iconHeightPx = AVERAGE_PERSON_HEIGHT_PX;
     iconHeightCm = AVERAGE_PERSON_HEIGHT_CM;
     IconComponent = EmojiPeopleIcon;
     iconMargin = -15;
     iconLabel = "person";
   } else {
-    iconHeightPx = COTTAGE_HEIGHT_PX;
     iconHeightCm = COTTAGE_HEIGHT_CM;
     IconComponent = CottageIcon;
     iconMargin = -35;
     iconLabel = "house";
   }
 
+  // Calculate the icon height in pixels based on 40% of the viewport height
+  const iconHeightPx = window.innerHeight * 0.25;
+
   // Calculate the height of each book in pixels, varying between MIN_BOOK_HEIGHT_CM and MAX_BOOK_HEIGHT_CM
-  const getRandomBookHeightCm = () =>
-    Math.random() * (MAX_BOOK_HEIGHT_CM - MIN_BOOK_HEIGHT_CM) +
-    MIN_BOOK_HEIGHT_CM;
-  const bookHeightsPx = Array.from({ length: numBooks }).map(
-    () => (getRandomBookHeightCm() / iconHeightCm) * iconHeightPx
+  const getRandomBookHeightPx = () =>
+    (Math.random() * (MAX_BOOK_HEIGHT_CM - MIN_BOOK_HEIGHT_CM) +
+      MIN_BOOK_HEIGHT_CM) *
+    (iconHeightPx / iconHeightCm);
+  const bookHeightsPx = Array.from({ length: numBooks }).map(() =>
+    getRandomBookHeightPx()
   );
 
   // Generate a random width for each book between 95% and 105%
@@ -96,9 +90,9 @@ const BooksStack: React.FC<BooksStackProps> = ({ books }) => {
   );
 
   return (
-    <div className="mt-10 flex flex-col h-full min-h-52 justify-between items-center">
-      <h2 className="mb-4">{numBooks} Books Read</h2>
-      <div className="fixed-container flex flex-col justify-end items-start h-full">
+    <div className="flex flex-col justify-center items-center h-full w-full">
+      <h1>You read {numBooks} books this year</h1>
+      <div className="flex flex-col justify-end items-center h-full">
         <div
           className="text-left flex items-end"
           style={{ height: `${iconHeightPx}px` }}
@@ -116,7 +110,7 @@ const BooksStack: React.FC<BooksStackProps> = ({ books }) => {
             />
           </div>
           <div
-            className="stack relative w-10 mr-4"
+            className="stack relative w-16 mr-4"
             style={{ height: `${totalStackHeightPx}px` }}
           >
             {Array.from({ length: numBooks }).map((_, index) => (
@@ -129,9 +123,7 @@ const BooksStack: React.FC<BooksStackProps> = ({ books }) => {
           </div>
         </div>
       </div>
-      <p className="mt-2 text-sm">
-        (that's what it looks like next to a {iconLabel})
-      </p>
+      <p className="mt-8">(looks good stacked next to a {iconLabel})</p>
     </div>
   );
 };

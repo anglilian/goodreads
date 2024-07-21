@@ -17,8 +17,8 @@ const TotalPagesRead: React.FC<TotalPagesReadProps> = ({ books }) => {
   return (
     <div className="mt-10 text-left">
       <h2>Hours Read</h2>
-      <p>{totalHours.toFixed(1)} hours</p>
-      <p>(that's like watching {(totalHours / 2).toFixed(0)} movies!)</p>
+      <p>{Math.round(totalHours)} hours</p>
+      <p>(like watching {Math.round(totalHours / 2)} movies but better)</p>
     </div>
   );
 };

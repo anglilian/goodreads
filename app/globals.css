@@ -100,3 +100,7 @@
 .rotate-y-270 {
   transform: rotateY(270deg);
 }
+
+.transition-opacity {
+  transition: opacity 0.5s ease-in-out;
+}
