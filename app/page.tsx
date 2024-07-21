@@ -7,12 +7,12 @@ import useBooksData from "@/hooks/useBooksData"; // Adjust the path according to
 import TopGenres from "@/components/TopGenres";
 import BookTable from "@/components/BookTable";
 import TotalPagesRead from "@/components/TotalPagesRead";
-import TotalBooksRead from "@/components/TotalBooksRead";
 import BooksStack from "@/components/BooksStack";
+import BookFlippingLoader from "@/components/BookFlippingLoader";
 
 const Home: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const [thisYearBooks, isLoading] = useBooksData(2024);
+  const [thisYearBooks, isLoading] = useBooksData(2015);
 
   return (
     <div className="flex flex-col items-center justify-center m-10 text-center">
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
         {currentYear} Goodreads Wrapped
       </h1>
       {isLoading ? (
-        <div>Looking through your library...</div>
+        <BookFlippingLoader />
       ) : (
         <div className="w-full max-w-4xl  mx-auto items-center">
           <div className="flex flex-row  justify-evenly flex-wrap">

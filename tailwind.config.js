@@ -17,6 +17,11 @@ module.exports = {
         merriweather: ["Merriweather", "serif"],
         roboto: ["Roboto", "sans-serif"],
       },
+      colors: {
+        background: "#f4f1ea",
+        primary: "#372212",
+        secondary: "#b7ad98",
+      },
     },
   },
   plugins: [],
