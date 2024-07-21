@@ -16,12 +16,13 @@
   }
 
   h2 {
-    @apply font-merriweather text-3xl;
+    @apply text-2xl font-roboto font-semibold;
   }
 
   body {
     color: var(--primary-color);
     background: var(--background-color);
+    font-size: large;
   }
 
   /* Style for the select dropdown */

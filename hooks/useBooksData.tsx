@@ -1,11 +1,13 @@
+// hooks/useBooksData.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import { Book } from "../types/types";
 
-const useBooksData = (year?: number): Book[] => {
+const useBooksData = (year?: number): [Book[], boolean] => {
   const [data, setData] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const csvFilePath = "/goodreads_data/2024-05-26-goodreads_library_export.csv";
 
   const getLastName = (authorLf: string) => {
@@ -323,13 +325,15 @@ const useBooksData = (year?: number): Book[] => {
         setData(booksWithDetails);
       } catch (error) {
         console.error("Error fetching the CSV file:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [csvFilePath, year]);
 
-  return data;
+  return [data, isLoading];
 };
 
 export default useBooksData;
