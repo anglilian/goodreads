@@ -4,13 +4,8 @@ import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import { Book } from "../types/types";
 
-interface ExtendedBook extends Book {
-  Genre?: string | null;
-  CoverURL?: string | null;
-}
-
-const useBooksData = (year?: number): ExtendedBook[] => {
-  const [data, setData] = useState<ExtendedBook[]>([]);
+const useBooksData = (year?: number): Book[] => {
+  const [data, setData] = useState<Book[]>([]);
   const csvFilePath = "/goodreads_data/2024-05-26-goodreads_library_export.csv";
 
   const getLastName = (authorLf: string) => {
@@ -276,7 +271,7 @@ const useBooksData = (year?: number): ExtendedBook[] => {
           );
         }
         const csv = await response.text();
-        const parsedData = Papa.parse<ExtendedBook>(csv, { header: true }).data;
+        const parsedData = Papa.parse<Book>(csv, { header: true }).data;
 
         console.log("Parsed CSV data:", parsedData);
 

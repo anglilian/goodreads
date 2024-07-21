@@ -15,4 +15,11 @@ export type Book = {
   "Exclusive Shelf"?: string;
   "Number of Pages"?: string;
   "Book Id"?: string;
+  Genre?: string | null;
+  CoverURL?: string | null;
 };
+
+export interface GenreCount {
+  genre: string;
+  count: number;
+}
