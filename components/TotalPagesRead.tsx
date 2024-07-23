@@ -18,7 +18,10 @@ const TotalPagesRead: React.FC<TotalPagesReadProps> = ({ books }) => {
     <div className="mt-10 text-left">
       <h2>Hours Read</h2>
       <p>{Math.round(totalHours)} hours</p>
-      <p>(like watching {Math.round(totalHours / 2)} movies but better)</p>
+      <p>
+        (like binge-watching {Math.round(totalHours / 10)} seasons of your
+        favourite TV series, but better)
+      </p>
     </div>
   );
 };

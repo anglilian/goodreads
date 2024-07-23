@@ -31,7 +31,7 @@ const BooksStack: React.FC<BooksStackProps> = ({ books }) => {
   } else if (numBooks <= 35) {
     iconHeightCm = SOFA_HEIGHT_CM;
     IconComponent = SofaIcon;
-    iconMargin = -40;
+    iconMargin = -25;
     iconLabel = "sofa";
   } else if (numBooks <= 80) {
     iconHeightCm = AVERAGE_PERSON_HEIGHT_CM;

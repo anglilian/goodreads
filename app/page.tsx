@@ -86,7 +86,7 @@ const Home: React.FC = () => {
               <div className="w-full max-w-2xl mr-2 ml-2 h-full flex items-center justify-center">
                 {components[currentIndex]}
               </div>
-              <p className="mt-2">Click Enter or tap to start</p>
+              <p className="mt-2">Click Enter or tap to continue</p>
             </>
           )}
         </>
