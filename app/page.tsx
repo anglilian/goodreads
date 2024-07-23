@@ -13,14 +13,16 @@ import Start from "@/components/Start";
 
 const Home: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const [thisYearBooks, isLoading] = useBooksData(currentYear);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [userBooks, isLoading] = useBooksData(uploadedFile, currentYear);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const components = [
     <Start key="1" year={currentYear} />,
-    <BooksStack key="2" books={thisYearBooks} />,
-    <TopGenres key="3" books={thisYearBooks} />,
-    <TotalPagesRead key="4" books={thisYearBooks} />,
+    <BooksStack key="2" books={userBooks} />,
+    <TopGenres key="3" books={userBooks} />,
+    <TotalPagesRead key="4" books={userBooks} />,
+    <BookTable key="5" books={userBooks} />, // Display user books
   ];
 
   // Handle key press event to navigate components
@@ -32,29 +34,62 @@ const Home: React.FC = () => {
       }
     };
 
-    const handleScreenTap = () => {
+    const handleTouchStart = () => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % components.length);
     };
 
     window.addEventListener("keydown", handleKeyPress);
-    window.addEventListener("click", handleScreenTap);
-    window.addEventListener("touchstart", handleScreenTap);
+    window.addEventListener("touchstart", handleTouchStart);
 
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
-      window.removeEventListener("click", handleScreenTap);
-      window.removeEventListener("touchstart", handleScreenTap);
+      window.removeEventListener("touchstart", handleTouchStart);
     };
   }, [components.length]);
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setUploadedFile(file);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden text-center">
       {isLoading ? (
         <BookFlippingLoader />
       ) : (
-        <div className="w-full max-w-2xl mr-2 ml-2 h-full flex items-center justify-center">
-          {components[currentIndex]}
-        </div>
+        <>
+          {!uploadedFile ? (
+            <div className="flex flex-col items-center justify-center">
+              <Start year={currentYear} />
+              <p className="mt-2">
+                Upload your Goodreads library{" "}
+                <a href="https://www.goodreads.com/review/import">from here</a>{" "}
+                to start
+              </p>
+              <div className="mt-4">
+                <label className="flex items-center justify-center border border-gray-300 rounded p-2 cursor-pointer">
+                  <span>Choose file</span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="w-full max-w-2xl mr-2 ml-2 h-full flex items-center justify-center">
+                {components[currentIndex]}
+              </div>
+              <p className="mt-2">Click Enter or tap to start</p>
+            </>
+          )}
+        </>
       )}
     </div>
   );

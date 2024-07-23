@@ -7,12 +7,12 @@
   --background-color: #f4f1ea;
   --primary-color: #372212;
   --secondary-color: #b7ad98;
+  --link-color: #00635d;
 }
 
 @layer base {
   h1 {
-    @apply text-4xl font-bold font-roboto;
-    color: var(--primary-color);
+    @apply text-4xl font-bold font-roboto text-primary;
   }
 
   h2 {
@@ -20,20 +20,31 @@
   }
 
   body {
-    color: var(--primary-color);
-    background: var(--background-color);
-    font-size: large;
+    @apply text-primary bg-background text-lg;
+  }
+
+  p {
+    @apply text-lg font-medium;
   }
 
   /* Style for the select dropdown */
   select.custom-dropdown {
-    @apply appearance-none bg-transparent pr-2;
-    color: var(--background-color); /* Text color */
+    @apply appearance-none bg-transparent pr-2 bg-background;
   }
 
   select.custom-dropdown option {
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
+    @apply text-primary bg-secondary;
+  }
+
+  /* New styles for linked text */
+  a {
+    @apply font-bold;
+    color: var(--link-color);
+    transition: color 0.3s ease;
+  }
+
+  a:hover {
+    @apply underline;
   }
 }
 
@@ -49,7 +60,7 @@
   }
 
   .nav-link {
-    @apply px-4 py-2  font-semibold rounded;
+    @apply px-4 py-2 font-semibold rounded;
     background-color: var(--secondary-color);
     color: var(--background-color);
   }

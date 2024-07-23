@@ -5,10 +5,12 @@ import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import { Book } from "../types/types";
 
-const useBooksData = (year?: number): [Book[], boolean] => {
+const useBooksData = (
+  csvFile: File | null,
+  year?: number
+): [Book[], boolean] => {
   const [data, setData] = useState<Book[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const csvFilePath = "/goodreads_data/2024-05-26-goodreads_library_export.csv";
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getLastName = (authorLf: string) => {
     if (!authorLf) return "";
@@ -265,14 +267,11 @@ const useBooksData = (year?: number): [Book[], boolean] => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!csvFile) return;
+
+      setIsLoading(true);
       try {
-        const response = await fetch(csvFilePath);
-        if (!response.ok) {
-          throw new Error(
-            `Network response was not ok: ${response.statusText}`
-          );
-        }
-        const csv = await response.text();
+        const csv = await csvFile.text();
         const parsedData = Papa.parse<Book>(csv, { header: true }).data;
 
         console.log("Parsed CSV data:", parsedData);
@@ -331,7 +330,7 @@ const useBooksData = (year?: number): [Book[], boolean] => {
     };
 
     fetchData();
-  }, [csvFilePath, year]);
+  }, [csvFile, year]);
 
   return [data, isLoading];
 };
