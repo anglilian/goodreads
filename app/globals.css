@@ -12,7 +12,7 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-bold font-roboto text-primary;
+    @apply text-4xl sm:text-6xl font-bold font-roboto text-primary;
   }
 
   h2 {
@@ -70,6 +70,18 @@
   .icon {
     @apply fill-primary w-full h-full;
   }
+
+  .scroller-element {
+    @apply min-h-screen flex justify-center items-center relative z-20;
+  }
+
+  .hidden {
+    @apply opacity-0;
+  }
+
+  .visible {
+    @apply opacity-100 transition-transform duration-500;
+  }
 }
 
 @keyframes flip {
@@ -120,4 +132,12 @@
 
 .transition-opacity {
   transition: opacity 0.5s ease-in-out;
+}
+
+/* Lock the book grid to the bottom */
+.bookGrid.locked {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

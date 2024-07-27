@@ -3,32 +3,17 @@
 import React, { useState, useRef } from "react";
 import "./globals.css"; // Ensure this is imported to apply the styles
 import useBooksData from "@/hooks/useBooksData"; // Adjust the path according to your project structure
-import TopGenres from "@/components/TopGenres";
-import BookTable from "@/components/BookTable";
-import TotalPagesRead from "@/components/TotalPagesRead";
-import BookComparison from "@/components/BookComparison";
 import BookFlippingLoader from "@/components/BookFlippingLoader";
 import Start from "@/components/Start";
 import ExportImage from "@/components/ExportImage";
 import FileUpload from "@/components/FileUpload";
-import useNavigationHandler from "@/hooks/useNavigationHandler";
-import BookCoversGrid from "@/components/BookCoversGrid"; // New import
+import ScrollingPage from "@/components/ScrollingPage";
 
 const Home: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [userBooks, isLoading] = useBooksData(uploadedFile, currentYear);
   const componentRef = useRef<HTMLDivElement>(null);
-
-  const components = [
-    <BookCoversGrid key="1" books={userBooks} />,
-    <BookComparison key="2" books={userBooks} />,
-    <TopGenres key="3" books={userBooks} />,
-    <TotalPagesRead key="4" books={userBooks} />,
-    <BookTable key="5" books={userBooks} />,
-  ];
-
-  const currentIndex = useNavigationHandler(components.length);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -55,7 +40,7 @@ const Home: React.FC = () => {
                 className="w-full h-full flex items-center justify-center"
                 ref={componentRef}
               >
-                {components[currentIndex]}
+                <ScrollingPage books={userBooks} />
               </div>
               <ExportImage componentRef={componentRef} />
             </div>

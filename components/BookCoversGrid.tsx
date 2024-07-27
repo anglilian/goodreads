@@ -30,19 +30,15 @@ const BookCoversGrid: React.FC<BookCoversGridProps> = ({ books }) => {
     window.addEventListener("resize", handleResize);
     handleResize(); // Call it initially to set the size
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [handleResize]);
 
   return (
     <div ref={containerRef} className="w-full h-full p-2">
-      <div className="fixed inset-0 flex justify-center items-center pointer-events-none z-50">
-        <h1 className="text-4xl sm:text-6xl font-bold text-background drop-shadow-xl">
-          Your Year in Books
-        </h1>
-      </div>
-      <div className="fixed inset-0 bg-primary opacity-50 z-40"></div>{" "}
-      {/* Add the overlay */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1">
+      <div className="fixed inset-0 bg-primary opacity-50 pointer-events-none z-10"></div>
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1 p-4 relative">
         {books.map((book) => {
           return (
             <div
