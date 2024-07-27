@@ -38,7 +38,9 @@ const ExportImage: React.FC<ExportImageProps> = ({ componentRef }) => {
         useCORS: true,
       }).then((canvas) => {
         // Reset the scaling and dimensions
-        componentRef.current.style.transform = "none";
+        if (componentRef.current) {
+          componentRef.current.style.transform = "none";
+        }
 
         const link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");

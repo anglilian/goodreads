@@ -67,7 +67,7 @@ const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
       <div
         id="title"
         ref={titleRef}
-        className="title fixed min-h-screen inset-0 flex justify-center items-center pointer-events-none z-20 transition-opacity duration-500"
+        className="fixed min-h-screen inset-0 flex justify-center items-center pointer-events-none z-20"
       >
         <h1 className="text-background drop-shadow-xl">Your Year in Books</h1>
       </div>
@@ -76,7 +76,7 @@ const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
       <div
         ref={comparisonRef}
         id="bookComparison"
-        className={`scroller-element transition-transform duration-500`}
+        className={`scroller-element`}
       >
         <div className="bg-background rounded-lg">
           <BookComparison books={books} />
@@ -84,10 +84,7 @@ const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
       </div>
       {/* Spacer element to create scroll depth */}
       <div className="h-20"></div>
-      <div
-        id="topGenres"
-        className={`scroller-element transition-transform duration-500`}
-      >
+      <div id="topGenres" className={`scroller-element`}>
         <div className="bg-background rounded-lg">
           <TopGenres books={books} />
         </div>

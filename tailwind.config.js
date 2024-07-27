@@ -25,6 +25,17 @@ module.exports = {
       gridTemplateColumns: {
         auto: "repeat(auto-fit, minmax(100px, 1fr))",
       },
+      transitionProperty: {
+        visibility: "transform",
+      },
+      transitionDuration: {
+        default: "500ms",
+      },
+    },
+  },
+  variants: {
+    extend: {
+      transform: ["responsive", "hover", "focus", "group-hover"],
     },
   },
   plugins: [],

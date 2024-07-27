@@ -76,11 +76,11 @@
   }
 
   .hidden {
-    @apply opacity-0;
+    @apply opacity-0 transform scale-75 transition-transform duration-default;
   }
 
   .visible {
-    @apply opacity-100 transition-transform duration-500;
+    @apply opacity-100 transform scale-100 transition-transform duration-default;
   }
 }
 
