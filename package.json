@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,6 +20,7 @@
     "@types/react-scroll": "^1.8.10",
     "chart.js": "^4.4.3",
     "dayjs": "^1.11.11",
+    "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
     "next": "14.2.3",
     "papaparse": "^5.4.1",

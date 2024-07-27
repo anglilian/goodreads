@@ -46,6 +46,10 @@
   a:hover {
     @apply underline;
   }
+
+  button {
+    @apply border border-gray-300 rounded p-2;
+  }
 }
 
 @layer components {
@@ -63,6 +67,10 @@
     @apply px-4 py-2 font-semibold rounded;
     background-color: var(--secondary-color);
     color: var(--background-color);
+  }
+
+  .icon {
+    @apply fill-primary w-full h-full;
   }
 }
 
