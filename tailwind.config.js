@@ -22,6 +22,9 @@ module.exports = {
         primary: "#372212",
         secondary: "#b7ad98",
       },
+      gridTemplateColumns: {
+        auto: "repeat(auto-fit, minmax(100px, 1fr))",
+      },
     },
   },
   plugins: [],

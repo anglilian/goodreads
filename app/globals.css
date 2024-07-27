@@ -54,19 +54,17 @@
 
 @layer components {
   .placeholder-box {
-    @apply flex items-center justify-center bg-gray-500 text-center box-border overflow-hidden text-ellipsis aspect-[2/3];
+    @apply flex items-center justify-center bg-secondary text-background text-center box-border overflow-hidden text-ellipsis aspect-[2/3];
     font-size: calc(0.5em + 0.5vw);
   }
 
   .placeholder-box p {
-    @apply m-0 leading-tight overflow-hidden text-ellipsis p-1;
+    @apply m-0 leading-tight overflow-hidden text-ellipsis p-1 text-sm;
     line-height: 1.1;
   }
 
   .nav-link {
-    @apply px-4 py-2 font-semibold rounded;
-    background-color: var(--secondary-color);
-    color: var(--background-color);
+    @apply px-4 py-2 font-semibold rounded bg-secondary text-background;
   }
 
   .icon {

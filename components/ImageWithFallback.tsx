@@ -1,9 +1,20 @@
-import Image from 'next/image';
-import { ImageWithFallbackProps } from '../types/types';
+import Image from "next/image";
 
-const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ imageSrc, alt, placeholder }) => {
+export interface ImageWithFallbackProps {
+  imageSrc?: string | null;
+  alt: string;
+  placeholder: React.ReactNode;
+}
+
+const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
+  imageSrc,
+  alt,
+  placeholder,
+}) => {
   return (
-    <div className="relative w-full pb-[150%]"> {/* Maintain 2:3 aspect ratio */}
+    <div className="relative w-full pb-[150%]">
+      {" "}
+      {/* Maintain 2:3 aspect ratio */}
       {imageSrc ? (
         <Image
           src={imageSrc}

@@ -1,0 +1,67 @@
+"use client"; // This marks the component as a client component
+
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { debounce } from "lodash";
+import ImageWithFallback from "@/components/ImageWithFallback";
+import { Book } from "@/types/types";
+import "@/app/globals.css"; // Ensure this is imported to apply the styles
+
+interface BookCoversGridProps {
+  books: Book[];
+}
+
+const BookCoversGrid: React.FC<BookCoversGridProps> = ({ books }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [containerWidth, setContainerWidth] = useState<number>(
+    window.innerWidth
+  );
+
+  const handleResize = useCallback(
+    debounce(() => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth);
+      }
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call it initially to set the size
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
+
+  return (
+    <div ref={containerRef} className="w-full h-full p-2">
+      <div className="fixed inset-0 flex justify-center items-center pointer-events-none z-50">
+        <h1 className="text-4xl sm:text-6xl font-bold text-background drop-shadow-xl">
+          Your Year in Books
+        </h1>
+      </div>
+      <div className="fixed inset-0 bg-primary opacity-50 z-40"></div>{" "}
+      {/* Add the overlay */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1">
+        {books.map((book) => {
+          return (
+            <div
+              key={book["Book Id"]}
+              className="flex justify-center items-center"
+            >
+              <ImageWithFallback
+                imageSrc={book.CoverURL}
+                alt={`${book.Title} by ${book["Author"]}`}
+                placeholder={
+                  <div className="placeholder-box">{book.Title}</div>
+                }
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default BookCoversGrid;

@@ -1,9 +1,3 @@
-export interface ImageWithFallbackProps {
-  imageSrc?: string;
-  alt: string;
-  placeholder: React.ReactNode;
-}
-
 // Define the Book type with optional fields for properties that might be missing
 export type Book = {
   ISBN?: string | null;
@@ -14,7 +8,7 @@ export type Book = {
   "My Rating"?: string;
   "Exclusive Shelf"?: string;
   "Number of Pages"?: string;
-  "Book Id"?: string;
+  "Book Id": string;
   Genre?: string | null;
   CoverURL?: string | null;
 };
