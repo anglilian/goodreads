@@ -1,93 +1,44 @@
 "use client"; // This marks the component as a client component
 
-import React, { useEffect, useState, useRef } from "react";
-import BookComparison from "./BookComparison";
+import React, { useEffect, useRef } from "react";
 import BookCoversGrid from "./BookCoversGrid";
 import { Book } from "@/types/types";
-import TopGenres from "./TopGenres";
 
 interface ScrollingPageProps {
   books: Book[];
 }
 
 const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const bookGridRef = useRef<HTMLDivElement>(null);
-  const comparisonRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const topGenresRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleIntersection = (entries: any[]) => {
-      entries.forEach((entry: { target: any; isIntersecting: any }) => {
-        const { target, isIntersecting } = entry;
-
-        if (target === comparisonRef.current) {
-          toggleClass(bookGridRef.current, "locked", isIntersecting);
-          toggleClass(titleRef.current, "hidden", isIntersecting);
-          toggleClass(comparisonRef.current, "visible", isIntersecting);
-        } else if (target === topGenresRef.current) {
-          toggleClass(topGenresRef.current, "visible", isIntersecting);
-        }
-      });
-    };
-
-    const toggleClass = (
-      element: HTMLDivElement | null,
-      className: string,
-      add: any
-    ) => {
-      if (element) {
-        if (add) {
-          element.classList.add(className);
+    const handleScroll = () => {
+      const grid = gridRef.current;
+      if (grid) {
+        // Reset scroll position to create infinite loop effect
+        if (grid.scrollTop >= grid.scrollHeight / 2) {
+          grid.scrollTop = 0;
         } else {
-          element.classList.remove(className);
+          grid.scrollTop += 1;
         }
       }
     };
 
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.1,
-    });
+    const intervalId = setInterval(handleScroll, 50); // Adjust speed here
 
-    if (comparisonRef.current) observer.observe(comparisonRef.current);
-    if (topGenresRef.current) observer.observe(topGenresRef.current);
-
-    return () => {
-      if (comparisonRef.current) observer.unobserve(comparisonRef.current);
-      if (topGenresRef.current) observer.unobserve(topGenresRef.current);
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full h-full relative">
-      <div ref={bookGridRef} className={`z-0 min-h-screen relative`}>
+    <div className="w-full relative h-screen overflow-hidden ">
+      <div className="relative -z-10" ref={gridRef}>
         <BookCoversGrid books={books} />
       </div>
-      <div
-        id="title"
-        ref={titleRef}
-        className="fixed min-h-screen inset-0 flex justify-center items-center pointer-events-none z-20"
-      >
-        <h1 className="text-background drop-shadow-xl">Your Year in Books</h1>
-      </div>
-      {/* Spacer element to create scroll depth */}
-      <div className="h-10"></div>
-      <div
-        ref={comparisonRef}
-        id="bookComparison"
-        className={`scroller-element`}
-      >
-        <div className="bg-background rounded-lg">
-          <BookComparison books={books} />
-        </div>
-      </div>
-      {/* Spacer element to create scroll depth */}
-      <div className="h-20"></div>
-      <div id="topGenres" className={`scroller-element`}>
-        <div className="bg-background rounded-lg">
-          <TopGenres books={books} />
-        </div>
+      <div className="title fixed h-screen inset-0 flex flex-col justify-center items-center pointer-events-none space-y-4 z-20">
+        <h1 className="text-background bg-secondary rounded-full p-4 drop-shadow-xl">
+          Your Year in Books
+        </h1>
+        <p className="text-background italic">Press Enter or tap to continue</p>
       </div>
     </div>
   );

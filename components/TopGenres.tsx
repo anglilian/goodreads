@@ -50,8 +50,8 @@ const TopGenres: React.FC<TopGenresProps> = ({ books }) => {
   const topGenres = getTopGenres(books);
 
   return (
-    <div className="mt-4 w-full justify-center space-y-4">
-      <h1>Top Reads from your Top Genres</h1>
+    <div className="mt-4 w-full justify-center space-y-4 p-4">
+      <h2>Top Reads from your Top Genres</h2>
       <ul className="list-none list-inside">
         {topGenres.map((item, index) => (
           <li key={index} className="mb-8">

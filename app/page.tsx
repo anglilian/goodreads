@@ -37,12 +37,12 @@ const Home: React.FC = () => {
           ) : (
             <div className="space-y-4 w-full h-full flex flex-col items-center justify-center">
               <div
-                className="w-full h-full flex items-center justify-center"
+                className="w-full h-full flex items-center justify-center "
                 ref={componentRef}
               >
                 <ScrollingPage books={userBooks} />
               </div>
-              <ExportImage componentRef={componentRef} />
+              {/* <ExportImage componentRef={componentRef} /> */}
             </div>
           )}
         </div>

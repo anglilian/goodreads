@@ -12,6 +12,7 @@ interface BookCoversGridProps {
 
 const BookCoversGrid: React.FC<BookCoversGridProps> = ({ books }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const duplicatedBooks = [...books, ...books]; // Duplicate books for wrapping effect
 
   const [containerWidth, setContainerWidth] = useState<number>(
     window.innerWidth
@@ -36,25 +37,24 @@ const BookCoversGrid: React.FC<BookCoversGridProps> = ({ books }) => {
   }, [handleResize]);
 
   return (
-    <div ref={containerRef} className="w-full h-full p-2">
+    <div
+      ref={containerRef}
+      className="w-full h-full p-2 overflow-hidden relative"
+    >
       <div className="fixed inset-0 bg-primary opacity-50 pointer-events-none z-10"></div>
-      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1 p-4 relative">
-        {books.map((book) => {
-          return (
-            <div
-              key={book["Book Id"]}
-              className="flex justify-center items-center"
-            >
-              <ImageWithFallback
-                imageSrc={book.CoverURL}
-                alt={`${book.Title} by ${book["Author"]}`}
-                placeholder={
-                  <div className="placeholder-box">{book.Title}</div>
-                }
-              />
-            </div>
-          );
-        })}
+      <div className="bookGridContent grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1 p-4 relative animate-scroll">
+        {duplicatedBooks.map((book, index) => (
+          <div
+            key={`${book["Book Id"]}-${index}`}
+            className="flex justify-center items-center"
+          >
+            <ImageWithFallback
+              imageSrc={book.CoverURL}
+              alt={`${book.Title} by ${book["Author"]}`}
+              placeholder={<div className="placeholder-box">{book.Title}</div>}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
