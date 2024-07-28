@@ -8,12 +8,23 @@ import Start from "@/components/Start";
 import ExportImage from "@/components/ExportImage";
 import FileUpload from "@/components/FileUpload";
 import ScrollingPage from "@/components/ScrollingPage";
+import BookComparison from "@/components/BookComparison";
+import TopGenres from "@/components/TopGenres";
+import useNavigationHandler from "@/hooks/useNavigationHandler";
 
 const Home: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [userBooks, isLoading] = useBooksData(uploadedFile, currentYear);
   const componentRef = useRef<HTMLDivElement>(null);
+
+  const components = [
+    <ScrollingPage key="0" books={userBooks} />,
+    <BookComparison key="1" books={userBooks} />,
+    <TopGenres key="2" books={userBooks} />,
+  ];
+
+  const currentIndex = useNavigationHandler(components.length);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -37,10 +48,10 @@ const Home: React.FC = () => {
           ) : (
             <div className="space-y-4 w-full h-full flex flex-col items-center justify-center">
               <div
-                className="w-full h-full flex items-center justify-center "
+                className="w-full h-full flex items-center justify-center"
                 ref={componentRef}
               >
-                <ScrollingPage books={userBooks} />
+                {components[currentIndex]}
               </div>
               {/* <ExportImage componentRef={componentRef} /> */}
             </div>
