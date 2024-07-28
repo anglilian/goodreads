@@ -25,7 +25,7 @@ const BookComparison: React.FC<BookComparisonProps> = ({ books }) => {
   const iconHeightPx = window.innerHeight * scaling;
 
   return (
-    <div className="flex flex-col h-full w-full p-4">
+    <div className="flex flex-col w-full p-4">
       <h1 className="text-center">You read {numBooks} books!</h1>
 
       <div className="flex flex-col flex-grow justify-end items-center h-full pt-12">

@@ -145,10 +145,6 @@
 }
 
 .bookGridContent {
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(100px, 1fr)
-  ); /* Adjust based on the number of books you want per row */
   animation: scroll 20s linear infinite;
 }
 
@@ -159,4 +155,8 @@
 .bookGridContent.wrap-around {
   position: absolute;
   top: 100%;
+}
+
+.modal-icon {
+  @apply text-background bg-primary bg-opacity-75 rounded-full p-2 drop-shadow-xl cursor-pointer;
 }

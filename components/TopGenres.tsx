@@ -56,8 +56,11 @@ const TopGenres: React.FC<TopGenresProps> = ({ books }) => {
         {topGenres.map((item, index) => (
           <li key={index} className="mb-8">
             <div className="border p-4 rounded-lg shadow-md inline-block">
-              <h3 className="text-lg font-bold mb-2">
-                #{index + 1} {item.genre}
+              <h3 className="text-lg mb-2">
+                <span className="font-bold ">
+                  #{index + 1} {item.genre}
+                </span>
+                : {item.count} books
               </h3>
               <div className="flex justify-center">
                 {getTopRatedBooks(

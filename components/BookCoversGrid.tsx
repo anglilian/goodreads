@@ -41,8 +41,7 @@ const BookCoversGrid: React.FC<BookCoversGridProps> = ({ books }) => {
       ref={containerRef}
       className="w-full h-full p-2 overflow-hidden relative"
     >
-      <div className="fixed inset-0 bg-primary opacity-50 pointer-events-none z-10"></div>
-      <div className="bookGridContent grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1 p-4 relative animate-scroll">
+      <div className="bookGridContent grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-1 p-4 relative">
         {duplicatedBooks.map((book, index) => (
           <div
             key={`${book["Book Id"]}-${index}`}

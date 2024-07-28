@@ -35,18 +35,18 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-center w-full p-2">
+    <div className="flex flex-col items-center h-screen justify-center text-center w-full p-2">
       {isLoading ? (
         <BookFlippingLoader />
       ) : (
-        <div className="w-full h-full items-center justify-center flex flex-col">
+        <div className="w-full items-center justify-center flex flex-col">
           {!uploadedFile ? (
             <>
               <Start year={currentYear} />
               <FileUpload onFileUpload={handleFileUpload} />
             </>
           ) : (
-            <div className="space-y-4 w-full h-full flex flex-col items-center justify-center">
+            <div className="space-y-4 w-full flex flex-col items-center justify-center">
               <div
                 className="w-full h-full flex items-center justify-center"
                 ref={componentRef}
