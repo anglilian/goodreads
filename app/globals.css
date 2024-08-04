@@ -158,5 +158,5 @@
 }
 
 .modal-icon {
-  @apply text-background bg-primary bg-opacity-75 rounded-full p-2 drop-shadow-xl cursor-pointer;
+  @apply text-primary bg-background bg-opacity-75 rounded-full p-2 drop-shadow-xl cursor-pointer;
 }

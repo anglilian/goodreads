@@ -3,11 +3,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import BookCoversGrid from "./BookCoversGrid";
 import { Book } from "@/types/types";
-import LibraryBooks from "@mui/icons-material/LibraryBooks"; // Importing cottage icon
-import Star from "@mui/icons-material/Star"; // Importing cottage icon
+import LibraryBooks from "@mui/icons-material/LibraryBooks"; // Importing library books icon
+import Star from "@mui/icons-material/Star"; // Importing star icon
 import BookComparison from "./BookComparison";
 import TopGenres from "./TopGenres";
 import Modal from "./Modal";
+import Tooltip from "@mui/material/Tooltip"; // Importing Tooltip component
+import Calendar from "@mui/icons-material/CalendarMonth";
+import PeakReadingMonth from "./PeakReadingMonth";
 
 interface ScrollingPageProps {
   books: Book[];
@@ -17,6 +20,8 @@ const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const [isBookModalOpen, setIsBookModalOpen] = useState<boolean>(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState<boolean>(false);
+  const [isCalendarModalOpen, setIsCalendarModalOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,20 +48,31 @@ const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
         <BookCoversGrid books={books} />
       </div>
       <div className="title fixed h-screen inset-0 flex flex-col justify-center items-center space-y-4 z-20">
-        <h1 className="text-background bg-primary bg-opacity-75 rounded-lg p-4 pr-6 pl-6 drop-shadow-xl">
+        <h1 className="text-primary bg-background bg-opacity-90 rounded-lg p-4 pr-6 pl-6 drop-shadow-xl">
           Your Year in Books
         </h1>
         <div className="flex space-x-4">
-          <LibraryBooks
-            className="modal-icon"
-            fontSize="large"
-            onClick={() => setIsBookModalOpen(true)}
-          />
-          <Star
-            className="modal-icon"
-            fontSize="large"
-            onClick={() => setIsInfoModalOpen(true)}
-          />
+          <Tooltip title="Books Read">
+            <LibraryBooks
+              className="modal-icon"
+              fontSize="large"
+              onClick={() => setIsBookModalOpen(true)}
+            />
+          </Tooltip>
+          <Tooltip title="Top Genres">
+            <Star
+              className="modal-icon"
+              fontSize="large"
+              onClick={() => setIsInfoModalOpen(true)}
+            />
+          </Tooltip>
+          <Tooltip title="Peak reading month">
+            <Calendar
+              className="modal-icon"
+              fontSize="large"
+              onClick={() => setIsCalendarModalOpen(true)}
+            />
+          </Tooltip>
         </div>
       </div>
       {isBookModalOpen && (
@@ -67,6 +83,11 @@ const ScrollingPage: React.FC<ScrollingPageProps> = ({ books }) => {
       {isInfoModalOpen && (
         <Modal onClose={() => setIsInfoModalOpen(false)}>
           <TopGenres books={books} />
+        </Modal>
+      )}
+      {isCalendarModalOpen && (
+        <Modal onClose={() => setIsCalendarModalOpen(false)}>
+          <PeakReadingMonth books={books} />
         </Modal>
       )}
     </div>

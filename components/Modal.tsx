@@ -28,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
       <div
         ref={modalRef}
-        className="bg-white p-4 rounded-lg shadow-lg relative"
+        className="bg-background p-4 rounded-lg shadow-lg relative"
       >
         {children}
       </div>
